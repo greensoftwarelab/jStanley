@@ -13,6 +13,7 @@ import java.util.List;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -52,13 +53,8 @@ public class GreenlabHandler extends AbstractHandler {
 	private List<Assignment> assignments;
 	private List<MethodInvocation> methodInvocations;
 	private List<MethodDeclaration> methodDeclarations;
-	private long initms;
-	private long endms;
-	
 
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		
-		initms = System.currentTimeMillis();
 		
 		ICommandService commandService = (ICommandService) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getService(ICommandService.class);
 		
@@ -103,32 +99,11 @@ public class GreenlabHandler extends AbstractHandler {
 			}
 			
 			try {
-//				IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-//				if(window != null) {
-//					IWorkbenchPage activePage = window.getActivePage();
-//
-//					IEditorPart activeEditor = activePage.getActiveEditor();
-//
-//					if (activeEditor != null) {
-//						IEditorInput input = activeEditor.getEditorInput();
-//
-//						IProject project = input.getAdapter(IProject.class);
-//						if (project == null) {
-//							IResource resource = input.getAdapter(IResource.class);
-//							if (resource != null) {
-//								project = resource.getProject();
-//								this.init();
-//								this.analyseProject(project);
-//							}
-//						}
-//					}
-//				}
 				IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
 		         IProject[] projects = workspaceRoot.getProjects();
 		         for(int i = 0; i < projects.length; i++) {
 		            IProject project = projects[i];
 		            if(project.isOpen() && project.hasNature(JavaCore.NATURE_ID)) {
-//		            	System.out.println(project.getName());
 		            	this.init();
 		            	this.analyseProject(project);
 		            }
@@ -167,12 +142,6 @@ public class GreenlabHandler extends AbstractHandler {
 	
 	@SuppressWarnings("deprecation")
 	private void analyseProject(IProject project)  throws JavaModelException{
-//		System.out.print("\n>>> analyseProject " + project.getName() + " with size: " + this.size + " and metrics: ");
-//		for(String m : this.analysisType) {
-//			System.out.print(m + ", ");
-//		}
-//		System.out.println("");
-
 		IPackageFragment[] packages = JavaCore.create(project).getPackageFragments();
 		
 		for (IPackageFragment mypackage : packages) {
@@ -203,9 +172,6 @@ public class GreenlabHandler extends AbstractHandler {
 		gc.normaliseVariablesCost();
 		gc.calculateSuggestions();
 		gc.printProjectCosts();
-		
-		endms = System.currentTimeMillis();
-		System.out.println("run time: " + (endms-initms));
 	}
 
 	private void analyseProjectSourceCode() {
