@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+    <extension point="org.eclipse.ui.commands">
+    		<category id="greenlab.dropdown.category" name="Greenlab"></category>     
+     	
+     	<command 
+     		categoryId="greenlab.dropdown.category" 
+     		defaultHandler="greenlab.handlers.GreenlabHandler"  
+     		id="greenlab.dropdown.command" 
+     		name="Greenlab">
+ 		</command>
+ 		
+ 		<command 
+     		categoryId="greenlab.dropdown.category" 
+     		defaultHandler="greenlab.handlers.GreenlabHandler"  
+     		id="greenlab.dropdown.command.state.size.25k" 
+     		name="Greenlab">
+     			<state
+		        	 	class="org.eclipse.ui.handlers.RegistryToggleState:true"
+		         	id="org.eclipse.ui.commands.toggleState">
+		   		</state>
+ 		</command>
+ 		
+ 		<command 
+     		categoryId="greenlab.dropdown.category" 
+     		defaultHandler="greenlab.handlers.GreenlabHandler"  
+     		id="greenlab.dropdown.command.state.size.250k" 
+     		name="Greenlab">
+     			<state
+		        	 	class="org.eclipse.ui.handlers.RegistryToggleState:false"
+		         	id="org.eclipse.ui.commands.toggleState">
+		   		</state>
+ 		</command>
+ 		
+ 		<command 
+     		categoryId="greenlab.dropdown.category" 
+     		defaultHandler="greenlab.handlers.GreenlabHandler"  
+     		id="greenlab.dropdown.command.state.size.1m" 
+     		name="Greenlab">
+     			<state
+		        	 	class="org.eclipse.ui.handlers.RegistryToggleState:false"
+		         	id="org.eclipse.ui.commands.toggleState">
+		   		</state>
+ 		</command>
+ 		
+ 		<command 
+     		categoryId="greenlab.dropdown.category" 
+     		defaultHandler="greenlab.handlers.GreenlabHandler"  
+     		id="greenlab.dropdown.command.state.metrics.joules" 
+     		name="Greenlab">
+     			<state
+		        	 	class="org.eclipse.ui.handlers.RegistryToggleState:true"
+		         	id="org.eclipse.ui.commands.toggleState">
+		   		</state>
+ 		</command>
+ 		
+ 		<command 
+     		categoryId="greenlab.dropdown.category" 
+     		defaultHandler="greenlab.handlers.GreenlabHandler"  
+     		id="greenlab.dropdown.command.state.metrics.ms" 
+     		name="Greenlab">
+     			<state
+		        	 	class="org.eclipse.ui.handlers.RegistryToggleState:false"
+		         	id="org.eclipse.ui.commands.toggleState">
+		   		</state>
+ 		</command>
+ 		
+ 		<!--
+ 		<command 
+     		categoryId="greenlab.dropdown.category" 
+     		defaultHandler="greenlab.handlers.GreenlabHandler"  
+     		id="greenlab.dropdown.command.state.metrics.mb" 
+     		name="Greenlab">
+     			<state
+		        	 	class="org.eclipse.ui.handlers.RegistryToggleState:false"
+		         	id="org.eclipse.ui.commands.toggleState">
+		   		</state>
+ 		</command>
+ 		-->
+ 		
+  	</extension>
+  
+  <extension point="org.eclipse.ui.menus">
+     
+     <menuContribution locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
+        <toolbar id="greenlab.dropdown.toolbar">
+           <command 
+           		commandId="greenlab.dropdown.command" 
+           		id="greenlab.dropdown.toolbar.command" 
+           		style="pulldown" 
+           		tooltip="Greenlan Code Analyser" 
+           		icon="icons/sample.png">
+           </command>
+        </toolbar>
+     </menuContribution>
+
+     <menuContribution locationURI="menu:greenlab.dropdown.toolbar.command">
+     
+     	<command
+            commandId="greenlab.dropdown.command.state.size.25k"
+            label="25K"
+            style="toggle">
+    		</command>
+    		
+    		<command
+            commandId="greenlab.dropdown.command.state.size.250k"
+            label="250K"
+            style="toggle">
+    		</command>
+    		
+    		<command
+            commandId="greenlab.dropdown.command.state.size.1m"
+            label="1M"
+            style="toggle">
+    		</command>
+
+        <separator name="separator-id" visible="true"></separator>
+        
+        <command
+            commandId="greenlab.dropdown.command.state.metrics.joules"
+            label="Joules"
+            style="toggle">
+    		</command>
+    		
+    		<command
+            commandId="greenlab.dropdown.command.state.metrics.ms"
+            label="Milliseconds"
+            style="toggle">
+    		</command>
+    		 
+    		 <!--
+    		<command
+            commandId="greenlab.dropdown.command.state.metrics.mb"
+            label="Memory"
+            style="toggle">
+    		</command>
+    		-->
+        
+     </menuContribution>
+
+  </extension>
+</plugin>
