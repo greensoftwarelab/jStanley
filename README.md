@@ -7,3 +7,8 @@ jStanley is a static analyzer developed as an Eclipse plugin. The tool is capabl
 - Depending on the Operating System this folder may be located at:
 	- **Linux**: usr/share/eclipse 
 	- **OSX**: /Applications/Eclipse.app/Contents/Eclipse
+- Restart Eclipse
+
+## How to use
+
+## Known bugs
