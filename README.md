@@ -10,7 +10,10 @@ jStanley is a static analyzer developed as an Eclipse plugin. The tool is capabl
 - Restart Eclipse
 
 ## How to use
-![alt text](https://github.com/greensoftwarelab/jStanley/blob/master/icons/sample.png)
+- Click ![jStanley](https://github.com/greensoftwarelab/jStanley/blob/master/icons/sample.png) icon located in your Eclipse toolbar menu
+- To change the default analysis type and population size, click on the dropdown arrow o the right side of ![jStanley](https://github.com/greensoftwarelab/jStanley/blob/master/icons/sample.png)
+	- Select one population size from 25K, 250K or 1M
+	- Select the analysis type from Joules and/or Miliseconds
 
 
 ## Known bugs
