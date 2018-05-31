@@ -3,7 +3,7 @@ jStanley is a static analyzer developed as an Eclipse plugin. The tool is capabl
 
 ## Instalation
 - Download or clone this repository
-- Move **greenlab_1.0.0.201805311446.jar** file located inside the **pluginjar** folder to eclipse **dropins** folder
+- Move the file **greenlab_1.0.0.201805311446.jar** located inside the folder **pluginjar** to eclipse **dropins** folder
 - Depending on the Operating System this folder may be located at:
-	- **Linux**: usr/share/eclipse/dropins 
-	- **OSX**: /Applications/Eclipse.app/Contents/Eclipse/dropins
+	- **Linux**: usr/share/eclipse 
+	- **OSX**: /Applications/Eclipse.app/Contents/Eclipse
