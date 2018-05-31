@@ -10,5 +10,7 @@ jStanley is a static analyzer developed as an Eclipse plugin. The tool is capabl
 - Restart Eclipse
 
 ## How to use
+![alt text](https://github.com/greensoftwarelab/jStanley/blob/master/icons/sample.png)
+
 
 ## Known bugs
