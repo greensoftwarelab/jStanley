@@ -1,0 +1,127 @@
+# Projects Analysis Information
+
+## Barbecue
+### Modifications
+### Results
+	- Analyse time: 2735ms
+	- Project total cost: 1912.42 Joules
+	- Suggestion total cost: 1271.41 Joules
+
+## Battlecry
+### Modifications
+	- battlecryLive@ - LinkedList lyrics -> ArrayList
+	- bcDemoModule@ - LinkedList wordLists -> ArrayList
+	- bcDemoModule@ - LinkedList layout -> ArrayList
+	- bcVoice@ - LinkedList lyrics -> ArrayList
+### Results
+	- Analyse time: 514ms
+	- Project total cost: 183.58 Joules
+	- Suggestion total cost: 150.73 Joules
+
+## Joda-Time
+### Modifications
+### Results
+	- Analyse time: 10490ms
+	- Project total cost: 4289.72 Joules
+	- Suggestion total cost: 3065.09 Joules
+
+## TemplateIt
+### Modifications
+	- HSSFDataFormat@createBuiltinFormats - Vector builtinFormats -> ArrayList
+	- MergeData@collectMergeData - HashMap<Integer,Map<Integer,CellRangeAddress>> mergeRegions -> Hashtable
+	- PdfWriter@debugPrintWidths - LinkedList<Float> lw -> ArrayList
+	- SheetGenerator@selectList - ArrayList<Integer> selectList -> Vector
+	- StaticTemplate@ - LinkedList<MergeRegion> mergeRegions -> ArrayList
+	- Template@ - HashMap<String,Parameter> parametersByName -> Hashtable
+	- Template@ - LinkedList<Parameter> parameters -> ArrayList
+	- Template@ - HashMap<Integer,Map<Integer,Parameter>> paramsByRowCol -> Hashtable
+	- TemplateSheet@ - HashMap<String,StaticTemplate> templateMap -> Hashtable
+	- TemplateSheet@ - HashMap<String,DynamicTemplate> dynamicTemplateMap -> Hashtable
+	- TemplateSheet@ - HashMap<String,NamedStyle> stylesMap -> Hashtable
+	- TemplateWorkbook@ - HashMap<String,TemplateSheet> sheets -> Hashtable
+	- TemplateProcessor@renameTemplateSheets - LinkedList<String> names -> ArrayList
+	- TemplateProcessor@ - HashSet<String> protectedSheetNames -> LinkedHashSet
+### Results
+	- Analyse time: 1019ms
+	- Project total cost: 168.81 Joules
+	- Suggestion total cost: 114.61 Joules
+
+## TwfbPlayer
+### Modifications
+	- AllCombatantSidesCounter@ - HashMap<CombatantSide,Counter> perSideCounters -> Hashtable
+	- BattlefieldDrawing@ - HashMap<Point,BattlefieldCell> cells -> Hashtable
+	- Battleplayer@ - HashSet<RoundListener> listeners -> TreeSet
+	- BattleStatistics@ - HashMap<CombatantSide,List<CriticalHit>> critHits -> Hashtable
+	- BattleStatistics@ - HashMap<CombatantSide,RoundStatistics> shotsPerRound -> Hashtable
+	- BattleStatistics@ - HashMap<CombatantSide,Set<PositionSwitch>> swapList -> Hashtable
+	- BattleStatistics@ - LinkedList<Combatant> turnOrder -> Stack
+	- BattleStatistics@ - HashMap<CombatantSide,AtomicInteger> shotRoundCounter -> Hashtable
+	- BattleStatistics@ - HashMap<Area,AreaStatistic> fieldStats -> Hashtable
+	- BattleStatistics@ - HashMap<Combatant,Counter> victims -> Hashtable
+	- BattleStatistics@ - HashMap<CombatantSide,AtomicInteger> hitRoundCounter -> Hashtable
+	- BattleStatistics@ - HashMap<CombatantSide,RoundStatistics> hitsPerRound -> Hashtable
+	- BattleStatistics@ - HashMap<Combatant,Counter> shots -> Hashtable
+	- BattleStatistics@getNotShootersPerRound - HashMap<CombatantSide,RoundStatistics> nonShootersPerRound -> Hashtable
+	- BattleStatistics@critList - ArrayList<CriticalHit> allCrits -> Stack
+	- BattleStatistics@switchedPosList - HashSet<PositionSwitch> allSwaps -> ConcurrentSkipListSet
+	- CombatantEventDispatcher@ - HashSet<CombatantObserver> observers -> TreeSet
+	- CombatantStatistic@ - HashMap<CombatantStatType,DataSet> allData -> Hashtable
+	- DamageWeaponData@readCSVFile - HashMap<Integer,Set<Integer>> result -> Hashtable
+	- DataSet@ - HashMap<CombatantSide,List<Integer>> valuesPerSide -> Hashtable
+	- DataSet@getAll - ArrayList<Integer> all -> Stack
+	- GuiPlayer@ - HashSet<PlayerDrawing> players -> TreeSet
+	- GuiPlayer@findUsers - HashSet<PlayerDrawing> result -> TreeSet
+	- GuiPlayer@findUsersWithWeapon - HashSet<PlayerDrawing> result -> TreeSet
+	- GuiPlayer@loadCombatants - HashSet<Combatant> allCombatants -> TreeSet
+	- JSONDataParser@ - HashMap<Combatant,CombatantState> preBattleCombatantStates -> Hashtable
+	- JSONDataParser@ - HashMap<Integer,Area> areas -> Hashtable
+	- JSONDataParser@ - HashMap<Integer,Combatant> westPlayers -> Hashtable
+	- JSONDataParser@ - HashMap<Combatant,CombatantState> initialCombatantStates -> Hashtable
+	- JSONDataParser@getAttackers - HashSet<Combatant> attackers -> TreeSet
+	- JSONDataParser@getBattle - HashMap<CombatantSide,Set<Combatant>> combatants -> Hashtable
+	- JSONDataParser@getDefenders - HashSet<Combatant> defenders -> TreeSet
+	- JSONDataParser@getPlan - LinkedList<Round> rounds -> Vector
+	- JSONDataParser@getStateAfterRound - HashMap<Combatant,CombatantState> newStates -> Hashtable
+	- JSONDataParser@parseCells - HashSet<Area> cells -> Hashtable
+	- JSWeaponData@loadData - HashMap<Integer,WeaponGameData> result -> Hashtable
+	- LogToText@getCombatants -> HashMap<Integer,String> combatants -> Hashtable
+	- MainWindow@ - HashSet<GuiPlayer> players -> TreeSet
+	- PlayerConfiguration@ - HashSet<PlayerConfigurationListener> listeners -> TreeSet
+	- RoundStatGenerator@ - HashMap<CombatantSide,LabeledData> count -> Hashtable
+	- RoundStatGenerator@ - HashMap<CombatantSide,LabeledData> health -> Hashtable
+	- SearchAndMarkPlayers@ - HashSet<PlayerDrawing> lastResult -> TreeSet
+	- SimpleBattleField@ - HashSet<Sector> sectors -> TreeSet
+	- SimpleBattleField@ - HashMap<Point,Area> cells -> Hashtable
+	- SimpleCombatant@ - HashSet<CombatantObserver> observers -> TreeSet
+	- SimpleSector@ - HashSet<SectorObserver> observers -> TreeSet
+	- SimpleSector@ - HashSet<Area> areas -> TreeSet
+	- StatisticDiagramm@ - LinkedList<double[]> datas -> ArrayList
+	- StatisticDiagramm@ - LinkedList<Paint> paints -> ArrayList
+	- SwapTableModel@ - ArrayList<PositionSwitch> swaps -> CopyOnWriteArrayList
+	- SwapTableModel@SwapTableModel - TreeSet<PositionSwitch> sorted -> ConcurrentSkipListSet
+### Results
+	- Analyse time: 3437ms
+	- Project total cost: 730.32 Joules
+	- Suggestion total cost: 575.30 Joules
+
+## Xisemele
+### Modifications
+	- FormatterProviderImpl@ - HashMap<Class<?>,Formatter<?>> formatters -> Hashtable
+### Results
+	- Analyse time: 588ms
+	- Project total cost: 22.84 Joules 
+	- Suggestion total cost: 21.28 Joules
+
+## Lagoon
+### Modifications
+	- HTMLSerializer@ - HashSet emptyElements -> LinkedHashSet
+	- HTMLSerializer@ - HashSet booleanAttributes -> LinkedHashSet
+	- HTMLSerializer@ - HashSet notEscapeElements -> LinkedHashSet
+	- HTMLSerializer@ - HashSet formattedElements -> LinkedHashSet
+	- XMLSerializer@ - HashSet emptyElements -> LinkedHashSet
+	- XMLSerializer@ - HashSet formattedElements -> LinkedHashSet
+	- XMLSerializer@startElement - HashSet xmlns -> LinkedHashSet
+### Results
+	- Analyse time: 1513ms
+	- Project total cost: 191.31 Joules 
+	- Suggestion total cost: 163.93 Joules
