@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.jdt.core.dom.IBinding;
 import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
@@ -43,15 +44,15 @@ public class GreenlabCore {
 		this.console = new GreenlabConsole();
 	}
 
-	public void addVariable(IVariableBinding ivb, ITypeBinding itb) {
+	public void addVariable(IVariableBinding ivb, ITypeBinding itb, int linenumber, int charstart, int charend) {
 		if(!this.variables.containsKey(ivb.getKey())) {
-			this.variables.put(ivb.getKey(), new Variable(ivb, itb));
+			this.variables.put(ivb.getKey(), new Variable(ivb, itb, linenumber, charstart, charend));
 		}
 	}
 
-	public void addVariable(IVariableBinding ivb, ITypeBinding itb, int parameterIndex) {
+	public void addVariable(IVariableBinding ivb, ITypeBinding itb, int linenumber, int charstart, int charend, int parameterIndex) {
 		if(!this.variables.containsKey(ivb.getKey())) {
-			this.variables.put(ivb.getKey(), new Variable(ivb, itb, parameterIndex));
+			this.variables.put(ivb.getKey(), new Variable(ivb, itb, linenumber, charstart, charend, parameterIndex));
 		}
 	}
 
@@ -207,7 +208,8 @@ public class GreenlabCore {
 				}
 				if(sorted != null && !sorted.isEmpty()) {
 					InvocationCost ivc = sorted.get(0);
-					v.setSuggestion(new Suggestion(ivc.getType(), ivc));
+					v.addSuggestion(new Suggestion(sorted.get(0).getType(), sorted.get(0)));
+					v.addSuggestion(new Suggestion(sorted.get(1).getType(), sorted.get(1)));
 					
 					String classname = "";
 					String blockname = "";
@@ -242,6 +244,23 @@ public class GreenlabCore {
 			}
 		}
 	}
+	
+	public void makeSuggestions() {
+		for(Variable v : this.variables.values()) {
+			if(!v.isParameter() && v.hasSuggestions()) {
+				try {
+					IMarker marker = v.getVariableBinding().getJavaElement().getResource().createMarker("org.eclipse.core.resources.problemmarker");
+					marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_WARNING);
+					marker.setAttribute(IMarker.MESSAGE, "Energy savings available");
+					marker.setAttribute(IMarker.LINE_NUMBER, v.getLineNumber());
+					marker.setAttribute(IMarker.CHAR_START, v.getCharStart());
+					marker.setAttribute(IMarker.CHAR_END, v.getCharStart()+v.getCharEnd());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 
 	public void printProjectCosts() {
 		float totalJoules = 0;
@@ -262,9 +281,9 @@ public class GreenlabCore {
 						}
 					}
 				}
-				if(v.getSuggestion() != null) {
-					suggestionJoules += v.getSuggestion().getCost().getJoules();
-					suggestionMs += v.getSuggestion().getCost().getMs();
+				if(v.getSuggestions().get(0) != null) {
+					suggestionJoules += v.getSuggestions().get(0).getCost().getJoules();
+					suggestionMs += v.getSuggestions().get(0).getCost().getMs();
 //					suggestionMb += v.getSuggestion().getCost().getMb();
 				}
 			}

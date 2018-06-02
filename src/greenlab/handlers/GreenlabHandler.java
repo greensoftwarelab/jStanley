@@ -13,7 +13,6 @@ import java.util.List;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -171,6 +170,7 @@ public class GreenlabHandler extends AbstractHandler {
 		gc.resolveVariablesInvocations();
 		gc.normaliseVariablesCost();
 		gc.calculateSuggestions();
+		gc.makeSuggestions();
 		gc.printProjectCosts();
 	}
 
@@ -189,7 +189,7 @@ public class GreenlabHandler extends AbstractHandler {
 						ITypeBinding itb = exp.resolveTypeBinding();
 
 						if(this.isListSetMap(t)) {
-							gc.addVariable(ivb,itb);
+							gc.addVariable(ivb,itb,((CompilationUnit) fd.getRoot()).getLineNumber(fd.getStartPosition()),fd.getStartPosition(),fd.getLength());
 						}
 					}
 				}
@@ -209,7 +209,7 @@ public class GreenlabHandler extends AbstractHandler {
 						IVariableBinding ivb = n.resolveBinding();
 						ITypeBinding itb = exp.resolveTypeBinding();
 						if(this.isListSetMap(t)) {
-							gc.addVariable(ivb,itb);
+							gc.addVariable(ivb,itb,((CompilationUnit) n.getRoot()).getLineNumber(n.getStartPosition()),n.getStartPosition(),n.getLength());
 						}
 					}
 				}
@@ -229,7 +229,7 @@ public class GreenlabHandler extends AbstractHandler {
 					IBinding ib = sn.resolveBinding();
 					if(ib.getKind() == IBinding.VARIABLE) {
 						IVariableBinding ivb = (IVariableBinding) ib;
-						gc.addVariable(ivb,itb);
+						gc.addVariable(ivb,itb,((CompilationUnit) ass.getRoot()).getLineNumber(ass.getStartPosition()),ass.getStartPosition(),ass.getLength());
 					}
 				}
 			}
@@ -244,7 +244,7 @@ public class GreenlabHandler extends AbstractHandler {
 					IVariableBinding ivb = svd.resolveBinding();
 					ITypeBinding itb = svd.getType().resolveBinding();
 					if(this.isListSetMap(itb)) {
-						gc.addVariable(ivb, itb, parameterIndex);
+						gc.addVariable(ivb, itb, ((CompilationUnit) svd.getRoot()).getLineNumber(svd.getStartPosition()), svd.getStartPosition(), svd.getLength(), parameterIndex);
 					}
 				}
 				parameterIndex++;

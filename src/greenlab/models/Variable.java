@@ -1,5 +1,6 @@
 package greenlab.models;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,28 +13,37 @@ import org.eclipse.jdt.core.dom.MethodInvocation;
 public class Variable {
 	
 	private int parameterIndex;
+	private int linenumber;
+	private int charstart;
+	private int charend;
 	private IVariableBinding ivb;
 	private ITypeBinding itb;
 	private Map<String,Invocation> invocations;
 	private Map<String,List<InvocationCost>> normalisedMatrix;
-	private Suggestion suggestion;
+	private List<Suggestion> suggestions;
 	
-	public Variable(IVariableBinding ivb, ITypeBinding itb) {
+	public Variable(IVariableBinding ivb, ITypeBinding itb, int linenumber, int charstart, int charend) {
 		this.ivb = ivb;
 		this.itb = itb;
 		this.parameterIndex = -1;
+		this.linenumber = linenumber;
+		this.charstart = charstart;
+		this.charend = charend;
 		this.invocations = new HashMap<String,Invocation>();
 		this.normalisedMatrix = new HashMap<String,List<InvocationCost>>();
-		this.suggestion = null;
+		this.suggestions = new ArrayList<Suggestion>();
 	}
 	
-	public Variable(IVariableBinding ivb, ITypeBinding itb, int parameterIndex) {
+	public Variable(IVariableBinding ivb, ITypeBinding itb, int linenumber, int charstart, int charend, int parameterIndex) {
 		this.ivb = ivb;
 		this.itb = itb;
 		this.parameterIndex = parameterIndex;
+		this.linenumber = linenumber;
+		this.charstart = charstart;
+		this.charend = charend;
 		this.invocations = new HashMap<String,Invocation>();
 		this.normalisedMatrix = new HashMap<String,List<InvocationCost>>();
-		this.suggestion = null;
+		this.suggestions = new ArrayList<Suggestion>();
 	}
 
 	public String getName() {
@@ -48,14 +58,26 @@ public class Variable {
 		return this.parameterIndex;
 	}
 	
+	public int getLineNumber() {
+		return this.linenumber;
+	}
+	
+	public int getCharStart() {
+		return this.charstart;
+	}
+	
+	public int getCharEnd() {
+		return this.charend;
+	}
+	
 	public boolean isParameter() {
 		return this.parameterIndex != -1;
 	}
-
-	public int parameterIndex() {
-		return this.parameterIndex;
-	}
 	
+	public boolean hasSuggestions() {
+		return !this.suggestions.isEmpty();
+	}
+
 	public IVariableBinding getVariableBinding() {
 		return this.ivb;
 	}
@@ -68,8 +90,8 @@ public class Variable {
 		return this.normalisedMatrix;
 	}
 	
-	public Suggestion getSuggestion() {
-		return this.suggestion;
+	public List<Suggestion> getSuggestions() {
+		return this.suggestions;
 	}
 	
 	public void addMethodInvocation(MethodInvocation method, MethodDeclaration md) {
@@ -96,7 +118,7 @@ public class Variable {
 		this.normalisedMatrix = nm;
 	}
 	
-	public void setSuggestion(Suggestion s) {
-		this.suggestion = s;
+	public void addSuggestion(Suggestion s) {
+		this.suggestions.add(s);
 	}
 }

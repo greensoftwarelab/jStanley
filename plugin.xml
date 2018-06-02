@@ -35,4 +35,7 @@
             <command commandId="greenlab.dropdown.command.state.metrics.ms" label="Milliseconds" style="toggle"></command>
         </menuContribution>
     </extension>
+	<extension id="greenlabmarker" point="org.eclipse.core.resources.markers">
+	   <super type="org.eclipse.core.resources.problemmarker"/>
+	</extension>
 </plugin>
