@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.jdt.core.IJavaModelMarker;
 import org.eclipse.jdt.core.dom.IBinding;
 import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
@@ -116,7 +117,6 @@ public class GreenlabCore {
 	}
 
 	public void normaliseVariablesCost() {
-//		System.out.println("\n\n**** calculate variables cost ****");
 		for(Variable v : this.variables.values()) {
 			if(!v.isParameter()) {
 				v.setNormalisedMatrix(this.gem.normaliseVariableCost(v));
@@ -249,12 +249,13 @@ public class GreenlabCore {
 		for(Variable v : this.variables.values()) {
 			if(!v.isParameter() && v.hasSuggestions()) {
 				try {
-					IMarker marker = v.getVariableBinding().getJavaElement().getResource().createMarker("org.eclipse.core.resources.problemmarker");
+					IMarker marker = v.getVariableBinding().getJavaElement().getResource().createMarker("greenlab.greenlabmarker");
 					marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_WARNING);
 					marker.setAttribute(IMarker.MESSAGE, "Energy savings available");
 					marker.setAttribute(IMarker.LINE_NUMBER, v.getLineNumber());
 					marker.setAttribute(IMarker.CHAR_START, v.getCharStart());
 					marker.setAttribute(IMarker.CHAR_END, v.getCharStart()+v.getCharEnd());
+					marker.setAttribute(IJavaModelMarker.ID, 1234);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -271,7 +272,7 @@ public class GreenlabCore {
 //		float suggestionMb = 0;
 
 		for(Variable v : this.variables.values()) {
-			if(!v.isParameter()) {
+			if(!v.isParameter() && v.hasSuggestions()) {
 				for(String key : v.getNormalisedMatrix().keySet()) {
 					for(InvocationCost ivc : v.getNormalisedMatrix().get(key)) {
 						if(ivc.isReal()) {
