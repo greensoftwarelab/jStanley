@@ -38,7 +38,7 @@
 	<extension id="greenlabmarker" point="org.eclipse.core.resources.markers">
 		<super type="org.eclipse.jdt.core.problem"/>
 	   	<super type="org.eclipse.core.resources.problemmarker"/>
-	   	<super type="org.eclipse.core.resources.textmarker"/>
+	   	<!-- <super type="org.eclipse.core.resources.textmarker"/> -->
 	</extension>
 	<extension point="org.eclipse.jdt.ui.quickFixProcessors">
 	   <quickFixProcessor class="greenlab.handlers.GreenlabQuickFixProcessor" id="org.eclipse.jdt.ui.text.correction.QuickFixProcessor" name="Greenlab Quick Fix Processor">
