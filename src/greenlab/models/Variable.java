@@ -82,6 +82,10 @@ public class Variable {
 		return this.ivb;
 	}
 	
+	public ITypeBinding getVariableTypeBinding() {
+		return this.itb;
+	}
+	
 	public Map<String,Invocation> getInvocations(){
 		return this.invocations;
 	}

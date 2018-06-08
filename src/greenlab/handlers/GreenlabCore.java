@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.IJavaModelMarker;
 import org.eclipse.jdt.core.dom.IBinding;
 import org.eclipse.jdt.core.dom.IMethodBinding;
@@ -245,20 +246,23 @@ public class GreenlabCore {
 		}
 	}
 	
-	public void makeSuggestions() {
+	public void makeSuggestions() throws CoreException{
 		for(Variable v : this.variables.values()) {
 			if(!v.isParameter() && v.hasSuggestions()) {
-				try {
-					IMarker marker = v.getVariableBinding().getJavaElement().getResource().createMarker("greenlab.greenlabmarker");
-					marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_WARNING);
-					marker.setAttribute(IMarker.MESSAGE, "Energy savings available");
-					marker.setAttribute(IMarker.LINE_NUMBER, v.getLineNumber());
-					marker.setAttribute(IMarker.CHAR_START, v.getCharStart());
-					marker.setAttribute(IMarker.CHAR_END, v.getCharStart()+v.getCharEnd());
-					marker.setAttribute(IJavaModelMarker.ID, 1234);
-				} catch (Exception e) {
-					e.printStackTrace();
+				IMarker marker = v.getVariableBinding().getJavaElement().getResource().createMarker("greenlab.greenlabmarker");
+				marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_WARNING);
+				marker.setAttribute(IMarker.PRIORITY, IMarker.PRIORITY_HIGH);
+				marker.setAttribute(IMarker.MESSAGE, "Energy savings available");
+				marker.setAttribute(IMarker.LINE_NUMBER, v.getLineNumber());
+				marker.setAttribute(IMarker.CHAR_START, v.getCharStart());
+				marker.setAttribute(IMarker.CHAR_END, v.getCharStart()+v.getCharEnd());
+				marker.setAttribute("KEY",v.getVariableBinding().getKey() + v.getVariableTypeBinding().getKey());
+				marker.setAttribute("TYPE", v.getType());
+				marker.setAttribute("S1", v.getSuggestions().get(0).getName());
+				if(v.getSuggestions().size() == 2) {
+					marker.setAttribute("S2", v.getSuggestions().get(1).getName());
 				}
+				marker.setAttribute(IJavaModelMarker.ID, 1234);
 			}
 		}
 	}

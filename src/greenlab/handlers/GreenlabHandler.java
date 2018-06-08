@@ -16,11 +16,11 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTParser;
@@ -42,7 +42,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-public class GreenlabHandler extends AbstractHandler {
+public final class GreenlabHandler extends AbstractHandler {
 	
 	private String size;
 	private List<String> analysisType;
@@ -140,8 +140,10 @@ public class GreenlabHandler extends AbstractHandler {
 	}
 	
 	@SuppressWarnings("deprecation")
-	private void analyseProject(IProject project)  throws JavaModelException{
+	private void analyseProject(IProject project)  throws CoreException{
 		IPackageFragment[] packages = JavaCore.create(project).getPackageFragments();
+		
+		project.deleteMarkers("greenlab.greenlabmarker", true, IProject.DEPTH_INFINITE);
 		
 		for (IPackageFragment mypackage : packages) {
 			if (mypackage.getKind() == IPackageFragmentRoot.K_SOURCE) {
@@ -219,7 +221,7 @@ public class GreenlabHandler extends AbstractHandler {
 		for(Assignment ass : assignments) {
 			Expression expl = ass.getLeftHandSide();
 			Expression expr = ass.getRightHandSide();
-
+			
 			if(expr != null && expl != null) {
 				ITypeBinding t = expl.resolveTypeBinding();
 				ITypeBinding itb = expr.resolveTypeBinding();
