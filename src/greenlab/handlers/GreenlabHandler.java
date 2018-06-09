@@ -189,7 +189,6 @@ public final class GreenlabHandler extends AbstractHandler {
 					if(exp != null) {
 						IVariableBinding ivb = n.resolveBinding();
 						ITypeBinding itb = exp.resolveTypeBinding();
-
 						if(this.isListSetMap(t)) {
 							gc.addVariable(ivb,itb,((CompilationUnit) fd.getRoot()).getLineNumber(fd.getStartPosition()),fd.getStartPosition(),fd.getLength());
 						}
