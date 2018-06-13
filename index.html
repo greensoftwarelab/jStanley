@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="jStanley - An Eclipse plugin that automatically changes Java collections by more efficient ones">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>jStanley</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/greensoftwarelab/jStanley">View on GitHub</a>
+
+          <h1 id="project_title">jStanley</h1>
+          <h2 id="project_tagline">An Eclipse plugin that automatically changes Java collections by more efficient ones</h2>
+
+            <section id="downloads">
+               <a class="zip_download_link" href="https://github.com/greensoftwarelab/jStanley/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/greensoftwarelab/jStanley/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer" style="text-align: justify;">
+      <section id="main_content" class="inner">
+<h1 id="jstanley">jStanley</h1>
+<p>jStanley is a static analyzer developed as an Eclipse plugin. The tool is capable of statically detecting the usage of energy-inefficient collections and suggest better alternatives. It can do the same, but considering the execution time or simultaneously energy and time.</p>
+
+<h2 id="installation">Installation</h2>
+<ol>
+  <li>Download or clone this repository</li>
+  <li>Move the file <strong>greenlab_1.0.0.201805311446.jar</strong> located inside the folder <strong>pluginjar</strong> to eclipse <strong>dropins</strong> folder</li>
+  <li>Depending on the Operating System this folder may be located at:
+    <ul>
+      <li><strong>Linux</strong>: usr/share/eclipse</li>
+      <li><strong>OSX</strong>: /Applications/Eclipse.app/Contents/Eclipse</li>
+    </ul>
+  </li>
+  <li>Restart Eclipse</li>
+</ol>
+
+<h2 id="how-to-use">How to use</h2>
+<ol>
+  <li>Click <img src="icons/sample.png" alt="jStanley" /> icon located in your Eclipse tool-bar menu</li>
+  <li>jStanley evaluates all open projects in Eclipse</li>
+  <li>To change the default analysis type and population size, click on the drop-down arrow to the right side of <img src="icons/sample.png" alt="jStanley" />
+    <ul>
+      <li>Select one population size from 25K, 250K or 1M</li>
+      <li>Select the analysis type from Joules and/or Miliseconds</li>
+    </ul>
+  </li>
+</ol>
+
+
+<p>
+The following video shows how to use jStanley.
+</p>
+
+<video width="632px" height="382px" controls>
+  <source src="demo.mov" type="video/mp4">
+Your browser does not support the video tag.
+</video>
+
+<h3>Scientific Results</h3>
+The (submitted) paper <a href="paper.pdf">jStanley: Placing a Green Thumb on Java Collections</a> describes jStanley.
+
+<h3>
+<a id="support-or-contact" class="anchor" href="#support-or-contact" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Contact</h3>
+
+<p align="justify">Have questions about jStanley? Contact us at <a href="https://github.com/greensoftwarelab" class="user-mention">@greensoftwarelab</a>, <a href="https://github.com/pedrosimao93" class="user-mention">@pedrosimao93</a>, <a href="https://github.com/States" class="user-mention">@States</a> or <a href="https://github.com/jacomecunha" class="user-mention">@jacomecunha</a>.
+  
+</p>
+
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">jStanley maintained by <a href="https://github.com/greensoftwarelab" class="user-mention">@greensoftwarelab</a></p>
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
