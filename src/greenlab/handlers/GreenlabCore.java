@@ -4,8 +4,11 @@ import static greenlab.utils.GreenlabConstants.JOULES;
 import static greenlab.utils.GreenlabConstants.MB;
 import static greenlab.utils.GreenlabConstants.MS;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
@@ -36,6 +39,14 @@ public class GreenlabCore {
 	private Map<String,Variable> variables;
 	private List<MethodInvocation> indirectInvocations;
 	private GreenlabConsole console;
+	/**
+	 * variable to store the gains (joules, mb, ms) for the best suggested collections
+	 */
+	private Map<Variable, Gains> gainsBest;
+	/**
+	 * variable to store the gains (joules, mb, ms) for the second best suggested collections
+	 */
+	private Map<Variable, Gains> gains2Best; 
 
 	public GreenlabCore(GreenlabHandler greenlabHandler, String size, List<String> type) {
 		this.analysisType = type;
@@ -44,6 +55,8 @@ public class GreenlabCore {
 		this.gem = new GreenlabEnergyManager(size);
 		this.gh = greenlabHandler;
 		this.console = new GreenlabConsole();
+		this.gainsBest = new Hashtable<Variable, Gains>();
+		this.gains2Best = new Hashtable<Variable, Gains>();
 	}
 
 	public void addVariable(IVariableBinding ivb, ITypeBinding itb, int linenumber, int charstart, int charend) {
@@ -233,33 +246,80 @@ public class GreenlabCore {
 							}
 						}
 						
+						Gains g = new Gains();
+						Gains g2 = new Gains();
+						if (this.analysisType.contains(JOULES)) {
+							g.setJoules(real.getJoules()-sorted.get(0).getJoules());
+							g2.setJoules(real.getJoules()-sorted.get(1).getJoules());
+						}
+						if (this.analysisType.contains(MS)) {
+							g.setMs(real.getMs()-sorted.get(0).getMs());						
+							g2.setMs(real.getMs()-sorted.get(1).getMs());
+						}
+						if (this.analysisType.contains(MB)) {
+							g.setMb(real.getMb()-sorted.get(0).getMb());						
+							g2.setMb(real.getMb()-sorted.get(1).getMb());
+						}
+						gainsBest.put(v, g);
+						gains2Best.put(v, g2);
+						
 						console.log(">> " + classname + "@" + blockname + " -> " + v.getType() + " " + v.getName());
 						console.log("  >> 1st - " + sorted.get(0).getType());
-						console.log("    >> gain of " + (real.getJoules()-sorted.get(0).getJoules()) + " Joules");
-						console.log("    >> gain of " + (real.getMs()-sorted.get(0).getMs()) + " Ms");
+						console.log("    >> gain of " + gainsBest.get(v).getJoules() + " Joules");
+						console.log("    >> gain of " + gainsBest.get(v).getMs() + " Ms");
 						console.log("  >> 2nd - " + sorted.get(1).getType());
-						console.log("    >> gain of " + (real.getJoules()-sorted.get(1).getJoules()) + " Joules");
-						console.log("    >> gain of " + (real.getMs()-sorted.get(1).getMs()) + " Ms");
+						console.log("    >> gain of " + gains2Best.get(v).getJoules() + " Joules");
+						console.log("    >> gain of " + gains2Best.get(v).getMs() + " Ms");
 					}
 				}
 			}
 		}
 	}
 	
-	public void makeSuggestions() throws CoreException{
+	public void makeSuggestions() throws CoreException{		
 		for(Variable v : this.variables.values()) {
 			if(!v.isParameter() && v.hasSuggestions()) {
 				IMarker marker = v.getVariableBinding().getJavaElement().getResource().createMarker("greenlab.greenlabmarker");
 				marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_WARNING);
 				marker.setAttribute(IMarker.PRIORITY, IMarker.PRIORITY_HIGH);
-				marker.setAttribute(IMarker.MESSAGE, "Energy savings available");
+				
+				DecimalFormat df = new DecimalFormat("#");
+				df.setRoundingMode(RoundingMode.CEILING);
+				ArrayList<String> gainsStr1 = new ArrayList<String>(3);
+				String gainsMsg1 = "";
+				
+				if (gainsBest.containsKey(v)) {
+					if (gainsBest.get(v).getJoules() != -1)
+						gainsStr1.add("energy by ~" + df.format(gainsBest.get(v).getJoules()) + "%");
+					if (gainsBest.get(v).getMs() != -1)
+						gainsStr1.add("execution time by ~" + df.format(gainsBest.get(v).getMs()) + "%");
+					if (gainsBest.get(v).getMb() != -1)
+						gainsStr1.add("memory by ~" + df.format(gainsBest.get(v).getMb()) + "%");
+				}
+				
+				for (String m : gainsStr1)
+					gainsMsg1 += m + ", ";
+				
+				if (gainsMsg1.length() > 2)
+					gainsMsg1 = ": " + gainsMsg1.substring(0, gainsMsg1.length()-2);
+				
+					
+				marker.setAttribute(IMarker.MESSAGE, "Savings available " + gainsMsg1);
 				marker.setAttribute(IMarker.LINE_NUMBER, v.getLineNumber());
 				marker.setAttribute(IMarker.CHAR_START, v.getCharStart());
 				marker.setAttribute(IMarker.CHAR_END, v.getCharStart()+v.getCharEnd());
 				marker.setAttribute("KEY",v.getVariableBinding().getKey() + v.getVariableTypeBinding().getKey());
 				marker.setAttribute("TYPE", v.getType());
 				marker.setAttribute("S1", v.getSuggestions().get(0).getName());
+				if (gainsBest.containsKey(v))
+					marker.setAttribute("S1percentage", gainsBest.get(v));
+				else
+					marker.setAttribute("S1percentage", null);
 				if(v.getSuggestions().size() == 2) {
+					if (gainsBest.containsKey(v))
+						marker.setAttribute("S1percentage", gains2Best.get(v));
+					else
+						marker.setAttribute("S1percentage", null);
 					marker.setAttribute("S2", v.getSuggestions().get(1).getName());
 				}
 				marker.setAttribute(IJavaModelMarker.ID, 1234);

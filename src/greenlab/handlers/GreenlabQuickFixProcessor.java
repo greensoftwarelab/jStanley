@@ -1,5 +1,13 @@
 package greenlab.handlers;
 
+import static greenlab.utils.GreenlabConstants.JOULES;
+import static greenlab.utils.GreenlabConstants.MB;
+import static greenlab.utils.GreenlabConstants.MS;
+
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -162,8 +170,46 @@ public class GreenlabQuickFixProcessor implements IQuickFixProcessor{
 		rwS2.replace(context.getCoveringNode(), nodePlaceholderS2, null);
 		
 		if(myMarker != null) {
-			IJavaCompletionProposal pS1 = new ASTRewriteCorrectionProposal("Change " + myMarker.getAttribute("TYPE") + " by " + myMarker.getAttribute("S1"), context.getCompilationUnit(), rwS1, 0);
-			IJavaCompletionProposal pS2 = new ASTRewriteCorrectionProposal("Change " + myMarker.getAttribute("TYPE") + " by " + myMarker.getAttribute("S2"), context.getCompilationUnit(), rwS2, 0);
+			DecimalFormat df = new DecimalFormat("#");
+			df.setRoundingMode(RoundingMode.CEILING);
+			
+			String gainsMsg1 = "";
+			String gainsMsg2 = "";
+			
+			if (myMarker.getAttribute("S1percentage") != null) {
+				Gains gBest = (Gains) myMarker.getAttribute("S1percentage");
+				ArrayList<String> gainsStr1 = new ArrayList<String>(3);
+				
+				if (gBest.getJoules() != -1) 
+					gainsStr1.add("energy by ~" + df.format(gBest.getJoules()) + "%");
+				if (gBest.getMs() != -1) 
+					gainsStr1.add("execution time by ~" + df.format(gBest.getMs()) + "%");				
+				if (gBest.getMb() != -1) 
+					gainsStr1.add("memory by ~" + df.format(gBest.getMb()) + "%");
+				
+				for (String m : gainsStr1)
+					gainsMsg1 += m + ", ";
+				gainsMsg1 = gainsMsg1.substring(0, gainsMsg1.length()-2);
+			}
+			
+			if (myMarker.getAttribute("S2percentage") != null) {
+				Gains g2Best = (Gains) myMarker.getAttribute("S2percentage");				
+				ArrayList<String> gainsStr2 = new ArrayList<String>(3);
+				
+				if (g2Best.getJoules() != -1)
+					gainsStr2.add("energy by ~" + df.format(g2Best.getJoules()) + "%");
+				if (g2Best.getMs() != -1) 
+					gainsStr2.add("execution time by ~" + df.format(g2Best.getMs()) + "%");
+				if (g2Best.getMb() != -1) 
+					gainsStr2.add("memory by ~" + df.format(g2Best.getMb()) + "%");
+				
+				for (String m : gainsStr2)
+					gainsMsg2 += m + ", ";
+				gainsMsg2 = gainsMsg2.substring(0, gainsMsg2.length()-2);
+			}
+			
+			IJavaCompletionProposal pS1 = new ASTRewriteCorrectionProposal("Change " + myMarker.getAttribute("TYPE") + " by " + myMarker.getAttribute("S1") + " to improve " + gainsMsg1, context.getCompilationUnit(), rwS1, 0);
+			IJavaCompletionProposal pS2 = new ASTRewriteCorrectionProposal("Change " + myMarker.getAttribute("TYPE") + " by " + myMarker.getAttribute("S2") + " to improve " + gainsMsg2, context.getCompilationUnit(), rwS2, 0);
 			
 			return new IJavaCompletionProposal[] {pS1,pS2};
 		}
