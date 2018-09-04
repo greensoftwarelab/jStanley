@@ -12,6 +12,8 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
+import javax.management.AttributeList;
+
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.IJavaModelMarker;
@@ -142,7 +144,7 @@ public class GreenlabCore {
 		for(Variable v : this.variables.values()) {
 			if(!v.isParameter()) {
 				Map<String,List<InvocationCost>> normalisedmatrix = v.getNormalisedMatrix();
-				Map<String,InvocationCost> grouped = new HashMap<String,InvocationCost>();
+				Map<String,InvocationCost> grouped = new Hashtable<String, InvocationCost>();
 				
 				for(String key : normalisedmatrix.keySet()) {
 					float groupTotalJoules = 0;
@@ -181,7 +183,7 @@ public class GreenlabCore {
 						sorted.sort((i1, i2) -> i1.getNormalMb() <= i2.getNormalMb() ? -1 : 1);
 					}
 				}else {
-					Map<String,InvocationCost> collectionNormalCost = new HashMap<String,InvocationCost>();
+					Map<String,InvocationCost> collectionNormalCost = new Hashtable<String, InvocationCost>();
 
 					for (String k : grouped.keySet()) {
 						
@@ -285,7 +287,7 @@ public class GreenlabCore {
 				
 				DecimalFormat df = new DecimalFormat("#");
 				df.setRoundingMode(RoundingMode.CEILING);
-				ArrayList<String> gainsStr1 = new ArrayList<String>(3);
+				ArrayList<Object> gainsStr1 = new AttributeList(3);
 				String gainsMsg1 = "";
 				
 				if (gainsBest.containsKey(v)) {
@@ -297,7 +299,7 @@ public class GreenlabCore {
 						gainsStr1.add("memory by ~" + df.format(gainsBest.get(v).getMb()) + "%");
 				}
 				
-				for (String m : gainsStr1)
+				for (Object m : gainsStr1)
 					gainsMsg1 += m + ", ";
 				
 				if (gainsMsg1.length() > 2)

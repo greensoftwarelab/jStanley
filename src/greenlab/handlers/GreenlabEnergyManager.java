@@ -44,6 +44,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
@@ -189,7 +190,7 @@ public class GreenlabEnergyManager {
 	public Map<String,List<InvocationCost>> normaliseVariableCost(Variable v) {
 		String type = this.getTypes(v)[0];
 		String file_type = this.getTypes(v)[1];
-		Map<String,List<InvocationCost>> result = new HashMap<String,List<InvocationCost>>();
+		Map<String,List<InvocationCost>> result = new Hashtable<String, List<InvocationCost>>();
 		
 		if(type != null && file_type != null) {
 			Map<String,Invocation> variableInvocations = v.getInvocations();
