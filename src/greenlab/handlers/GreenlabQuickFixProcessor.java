@@ -73,16 +73,24 @@ public class GreenlabQuickFixProcessor implements IQuickFixProcessor{
 						if(((ClassInstanceCreation) assOriginal.getRightHandSide()).getType().isSimpleType()) {
 							SimpleType stS1 = (SimpleType) ((ClassInstanceCreation) assPlaceholderS1.getRightHandSide()).getType();
 							SimpleType stS2 = (SimpleType) ((ClassInstanceCreation) assPlaceholderS2.getRightHandSide()).getType();
-							stS1.setName(astS1.newSimpleName((String) myMarker.getAttribute("S1")));
-							stS2.setName(astS2.newSimpleName((String) myMarker.getAttribute("S2")));
+							// there may be no suggestions
+							if (myMarker.getAttribute("S1") != null) {
+								stS1.setName(astS1.newSimpleName((String) myMarker.getAttribute("S1")));
+								if (myMarker.getAttribute("S2") != null)
+									stS2.setName(astS2.newSimpleName((String) myMarker.getAttribute("S2")));
+							}
 						}else if(((ClassInstanceCreation) assOriginal.getRightHandSide()).getType().isParameterizedType()) {
 							ParameterizedType ptS1 = (ParameterizedType) ((ClassInstanceCreation) assPlaceholderS1.getRightHandSide()).getType();
 							ParameterizedType ptS2 = (ParameterizedType) ((ClassInstanceCreation) assPlaceholderS2.getRightHandSide()).getType();
 							if(ptS1.getType().isSimpleType()) {
 								SimpleType stS1 = (SimpleType) ptS1.getType();
 								SimpleType stS2 = (SimpleType) ptS2.getType();
-								stS1.setName(astS1.newSimpleName((String) myMarker.getAttribute("S1")));
-								stS2.setName(astS2.newSimpleName((String) myMarker.getAttribute("S2")));
+								// there may be no suggestions
+								if (myMarker.getAttribute("S1") != null) {
+									stS1.setName(astS1.newSimpleName((String) myMarker.getAttribute("S1")));
+									if (myMarker.getAttribute("S2") != null)
+										stS2.setName(astS2.newSimpleName((String) myMarker.getAttribute("S2")));
+								}
 							}
 						}
 					}
@@ -112,16 +120,22 @@ public class GreenlabQuickFixProcessor implements IQuickFixProcessor{
 							if(((ClassInstanceCreation) expOriginal).getType().isSimpleType()) {
 								SimpleType stS1 = (SimpleType) ((ClassInstanceCreation) expS1).getType();
 								SimpleType stS2 = (SimpleType) ((ClassInstanceCreation) expS2).getType();
-								stS1.setName(astS1.newSimpleName((String) myMarker.getAttribute("S1")));
-								stS2.setName(astS2.newSimpleName((String) myMarker.getAttribute("S2")));
+								if (myMarker.getAttribute("S1") != null) {
+									stS1.setName(astS1.newSimpleName((String) myMarker.getAttribute("S1")));
+									if (myMarker.getAttribute("S2") != null)
+										stS2.setName(astS2.newSimpleName((String) myMarker.getAttribute("S2")));
+								}
 							}else if(((ClassInstanceCreation) expOriginal).getType().isParameterizedType()) {
 								ParameterizedType ptS1 = (ParameterizedType) ((ClassInstanceCreation) expS1).getType();
 								ParameterizedType ptS2 = (ParameterizedType) ((ClassInstanceCreation) expS2).getType();
 								if(ptS1.getType().isSimpleType()) {
 									SimpleType stS1 = (SimpleType) ptS1.getType();
 									SimpleType stS2 = (SimpleType) ptS2.getType();
-									stS1.setName(astS1.newSimpleName((String) myMarker.getAttribute("S1")));
-									stS2.setName(astS2.newSimpleName((String) myMarker.getAttribute("S2")));
+									if (myMarker.getAttribute("S1") != null) {
+										stS1.setName(astS1.newSimpleName((String) myMarker.getAttribute("S1")));
+										if (myMarker.getAttribute("S2") != null)
+											stS2.setName(astS2.newSimpleName((String) myMarker.getAttribute("S2")));
+									}
 								}
 							}
 						}
@@ -149,16 +163,22 @@ public class GreenlabQuickFixProcessor implements IQuickFixProcessor{
 					if(((ClassInstanceCreation) expOriginal).getType().isSimpleType()) {
 						SimpleType stS1 = (SimpleType) ((ClassInstanceCreation) expS1).getType();
 						SimpleType stS2 = (SimpleType) ((ClassInstanceCreation) expS2).getType();
-						stS1.setName(astS1.newSimpleName((String) myMarker.getAttribute("S1")));
-						stS2.setName(astS2.newSimpleName((String) myMarker.getAttribute("S2")));
+						if (myMarker.getAttribute("S1") != null) {
+							stS1.setName(astS1.newSimpleName((String) myMarker.getAttribute("S1")));
+							if (myMarker.getAttribute("S2") != null)
+								stS2.setName(astS2.newSimpleName((String) myMarker.getAttribute("S2")));
+						}
 					}else if(((ClassInstanceCreation) expOriginal).getType().isParameterizedType()) {
 						ParameterizedType ptS1 = (ParameterizedType) ((ClassInstanceCreation) expS1).getType();
 						ParameterizedType ptS2 = (ParameterizedType) ((ClassInstanceCreation) expS2).getType();
 						if(ptS1.getType().isSimpleType()) {
 							SimpleType stS1 = (SimpleType) ptS1.getType();
 							SimpleType stS2 = (SimpleType) ptS2.getType();
-							stS1.setName(astS1.newSimpleName((String) myMarker.getAttribute("S1")));
-							stS2.setName(astS2.newSimpleName((String) myMarker.getAttribute("S2")));
+							if (myMarker.getAttribute("S1") != null) {
+								stS1.setName(astS1.newSimpleName((String) myMarker.getAttribute("S1")));
+								if (myMarker.getAttribute("S2") != null)
+									stS2.setName(astS2.newSimpleName((String) myMarker.getAttribute("S2")));
+							}
 						}
 					}
 				}
@@ -190,28 +210,35 @@ public class GreenlabQuickFixProcessor implements IQuickFixProcessor{
 				for (String m : gainsStr1)
 					gainsMsg1 += m + ", ";
 				gainsMsg1 = gainsMsg1.substring(0, gainsMsg1.length()-2);
+			
+				if (myMarker.getAttribute("S2percentage") != null) {
+					Gains g2Best = (Gains) myMarker.getAttribute("S2percentage");				
+					ArrayList<String> gainsStr2 = new ArrayList<String>(3);
+					
+					if (g2Best.getJoules() != -1)
+						gainsStr2.add("energy by ~" + df.format(g2Best.getJoules()) + "%");
+					if (g2Best.getMs() != -1) 
+						gainsStr2.add("execution time by ~" + df.format(g2Best.getMs()) + "%");
+					if (g2Best.getMb() != -1) 
+						gainsStr2.add("memory by ~" + df.format(g2Best.getMb()) + "%");
+					
+					for (String m : gainsStr2)
+						gainsMsg2 += m + ", ";
+					gainsMsg2 = gainsMsg2.substring(0, gainsMsg2.length()-2);
+				}
 			}
 			
-			if (myMarker.getAttribute("S2percentage") != null) {
-				Gains g2Best = (Gains) myMarker.getAttribute("S2percentage");				
-				ArrayList<String> gainsStr2 = new ArrayList<String>(3);
-				
-				if (g2Best.getJoules() != -1)
-					gainsStr2.add("energy by ~" + df.format(g2Best.getJoules()) + "%");
-				if (g2Best.getMs() != -1) 
-					gainsStr2.add("execution time by ~" + df.format(g2Best.getMs()) + "%");
-				if (g2Best.getMb() != -1) 
-					gainsStr2.add("memory by ~" + df.format(g2Best.getMb()) + "%");
-				
-				for (String m : gainsStr2)
-					gainsMsg2 += m + ", ";
-				gainsMsg2 = gainsMsg2.substring(0, gainsMsg2.length()-2);
+			if (myMarker.getAttribute("S1") != null) {
+				IJavaCompletionProposal pS1 = new ASTRewriteCorrectionProposal("Change " + myMarker.getAttribute("TYPE") + " by " + myMarker.getAttribute("S1") + " to improve " + gainsMsg1, context.getCompilationUnit(), rwS1, 0);
+				if (myMarker.getAttribute("S2") != null) {
+					IJavaCompletionProposal pS2 = new ASTRewriteCorrectionProposal("Change " + myMarker.getAttribute("TYPE") + " by " + myMarker.getAttribute("S2") + " to improve " + gainsMsg2, context.getCompilationUnit(), rwS2, 0);
+					return new IJavaCompletionProposal[] {pS1,pS2};
+				}
+				else
+					return new IJavaCompletionProposal[] {pS1};
 			}
-			
-			IJavaCompletionProposal pS1 = new ASTRewriteCorrectionProposal("Change " + myMarker.getAttribute("TYPE") + " by " + myMarker.getAttribute("S1") + " to improve " + gainsMsg1, context.getCompilationUnit(), rwS1, 0);
-			IJavaCompletionProposal pS2 = new ASTRewriteCorrectionProposal("Change " + myMarker.getAttribute("TYPE") + " by " + myMarker.getAttribute("S2") + " to improve " + gainsMsg2, context.getCompilationUnit(), rwS2, 0);
-			
-			return new IJavaCompletionProposal[] {pS1,pS2};
+			else
+				return null;
 		}
 		
 		return null;

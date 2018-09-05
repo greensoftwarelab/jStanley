@@ -224,8 +224,23 @@ public class GreenlabCore {
 				}
 				if(sorted != null && !sorted.isEmpty()) {
 					InvocationCost ivc = sorted.get(0);
-					v.addSuggestion(new Suggestion(sorted.get(0).getType(), sorted.get(0)));
-					v.addSuggestion(new Suggestion(sorted.get(1).getType(), sorted.get(1)));
+					
+					int maxSuggestions = 2;
+					int i = 0;
+					int j = 0;
+					int index1 = -1, index2 = -1;
+					while (j < maxSuggestions && i < sorted.size()-1) {
+						// only add the suggestion if its type is different from the current one
+						if (v.getType().compareTo(sorted.get(j).getType()) != 0) {
+							v.addSuggestion(new Suggestion(sorted.get(j).getType(), sorted.get(j)));
+							if (index1 == -1)
+								index1 = j;
+							else
+								index2 = j;
+							j++;
+						}
+						i++;
+					}
 					
 					String classname = "";
 					String blockname = "";
@@ -248,30 +263,46 @@ public class GreenlabCore {
 							}
 						}
 						
-						Gains g = new Gains();
-						Gains g2 = new Gains();
-						if (this.analysisType.contains(JOULES)) {
-							g.setJoules(real.getJoules()-sorted.get(0).getJoules());
-							g2.setJoules(real.getJoules()-sorted.get(1).getJoules());
+						if (index1 != -1) {
+							Gains g = new Gains();
+							if (this.analysisType.contains(JOULES)) {
+								g.setJoules(real.getJoules()-sorted.get(index1).getJoules());
+							}
+							if (this.analysisType.contains(MS)) {
+								g.setMs(real.getMs()-sorted.get(index1).getMs());						
+							}
+							if (this.analysisType.contains(MB)) {
+								g.setMb(real.getMb()-sorted.get(index1).getMb());						
+							}
+							gainsBest.put(v, g);
+						
+							// this verification only makes sense if there is at least the first index, thus it is inside the previous if
+							if (index2 != -1) {
+								Gains g2 = new Gains();
+								if (this.analysisType.contains(JOULES)) {
+									g2.setJoules(real.getJoules()-sorted.get(index2).getJoules());
+								}
+								if (this.analysisType.contains(MS)) {			
+									g2.setMs(real.getMs()-sorted.get(index2).getMs());
+								}
+								if (this.analysisType.contains(MB)) {				
+									g2.setMb(real.getMb()-sorted.get(index2).getMb());
+								}
+								gains2Best.put(v, g2);
+							}
 						}
-						if (this.analysisType.contains(MS)) {
-							g.setMs(real.getMs()-sorted.get(0).getMs());						
-							g2.setMs(real.getMs()-sorted.get(1).getMs());
-						}
-						if (this.analysisType.contains(MB)) {
-							g.setMb(real.getMb()-sorted.get(0).getMb());						
-							g2.setMb(real.getMb()-sorted.get(1).getMb());
-						}
-						gainsBest.put(v, g);
-						gains2Best.put(v, g2);
 						
 						console.log(">> " + classname + "@" + blockname + " -> " + v.getType() + " " + v.getName());
-						console.log("  >> 1st - " + sorted.get(0).getType());
-						console.log("    >> gain of " + gainsBest.get(v).getJoules() + " Joules");
-						console.log("    >> gain of " + gainsBest.get(v).getMs() + " Ms");
-						console.log("  >> 2nd - " + sorted.get(1).getType());
-						console.log("    >> gain of " + gains2Best.get(v).getJoules() + " Joules");
-						console.log("    >> gain of " + gains2Best.get(v).getMs() + " Ms");
+						if (index1 != -1) {
+							console.log("  >> 1st - " + sorted.get(0).getType());
+							console.log("    >> gain of " + gainsBest.get(v).getJoules() + " Joules");
+							console.log("    >> gain of " + gainsBest.get(v).getMs() + " Ms");
+						}
+						if (index2 != -1) {
+							console.log("  >> 2nd - " + sorted.get(1).getType());
+							console.log("    >> gain of " + gains2Best.get(v).getJoules() + " Joules");
+							console.log("    >> gain of " + gains2Best.get(v).getMs() + " Ms");
+						}
 					}
 				}
 			}
@@ -312,18 +343,30 @@ public class GreenlabCore {
 				marker.setAttribute(IMarker.CHAR_END, v.getCharStart()+v.getCharEnd());
 				marker.setAttribute("KEY",v.getVariableBinding().getKey() + v.getVariableTypeBinding().getKey());
 				marker.setAttribute("TYPE", v.getType());
-				marker.setAttribute("S1", v.getSuggestions().get(0).getName());
-				if (gainsBest.containsKey(v))
-					marker.setAttribute("S1percentage", gainsBest.get(v));
-				else
-					marker.setAttribute("S1percentage", null);
-				if(v.getSuggestions().size() == 2) {
+				// there may be no suggestions 
+				if(v.getSuggestions().size() >= 1) {
+					marker.setAttribute("S1", v.getSuggestions().get(0).getName());
 					if (gainsBest.containsKey(v))
-						marker.setAttribute("S1percentage", gains2Best.get(v));
+						marker.setAttribute("S1percentage", gainsBest.get(v));
 					else
 						marker.setAttribute("S1percentage", null);
-					marker.setAttribute("S2", v.getSuggestions().get(1).getName());
+					
+					if(v.getSuggestions().size() == 2) {
+						if (gainsBest.containsKey(v))
+							marker.setAttribute("S2percentage", gains2Best.get(v));
+						else
+							marker.setAttribute("S2percentage", null);
+						marker.setAttribute("S2", v.getSuggestions().get(1).getName());
+					}
+					else {
+						marker.setAttribute("S2", null);
+					}					
 				}
+				else {
+					marker.setAttribute("S1", null);
+					marker.setAttribute("S2", null);
+				}
+								
 				marker.setAttribute(IJavaModelMarker.ID, 1234);
 			}
 		}
