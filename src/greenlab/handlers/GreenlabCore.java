@@ -231,7 +231,8 @@ public class GreenlabCore {
 					int index1 = -1, index2 = -1;
 					while (j < maxSuggestions && i < sorted.size()-1) {
 						// only add the suggestion if its type is different from the current one
-						if (v.getType().compareTo(sorted.get(j).getType()) != 0) {
+						// using starts with because the original type has the type parameter and the suggestion doesn't
+						if (!v.getType().startsWith(sorted.get(j).getType())) {
 							v.addSuggestion(new Suggestion(sorted.get(j).getType(), sorted.get(j)));
 							if (index1 == -1)
 								index1 = j;
